@@ -10,13 +10,13 @@ namespace window
 	public:
 		Window(HINSTANCE hInstance, int nCmdShow, tracker::ApmTracker* tracker);
 		~Window();
-		int run();
+		int Run();
 
 	private:
-		static LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+		static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-		void initializeWindow();
-		void onPaint();
+		void InitializeWindow();
+		void OnPaint();
 
 		HINSTANCE m_hInstance;
 		HWND m_hwnd;

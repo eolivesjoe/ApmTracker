@@ -6,18 +6,18 @@
 
 namespace app
 {
-	int App::run()
+	int App::Run()
 	{
 		HINSTANCE hInstance = GetModuleHandle(nullptr);
 		int nCmdShow = SW_SHOWDEFAULT;
 
 		tracker::ApmTracker tracker;
-		tracker.start();
+		tracker.Start();
 
 		window::Window window(hInstance, nCmdShow, &tracker);
-		window.run();
+		window.Run();
 
-		tracker.stop();
+		tracker.Stop();
 		return 0;
 	}
 }

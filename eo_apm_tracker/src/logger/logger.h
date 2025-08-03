@@ -4,9 +4,9 @@
 
 namespace logger
 {
-    void init();
+    void Init();
 
-    void info(const std::string& msg);
+    void Info(const std::string& msg);
 
-    void error(const std::string& msg);
+    void Error(const std::string& msg);
 } // namespace logger

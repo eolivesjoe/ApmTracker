@@ -13,33 +13,33 @@ namespace tracker
 		ApmTracker();
 		~ApmTracker();
 
-		void start();
-		void stop();
-		void resetSession();
+		void Start();
+		void Stop();
+		void ResetSession();
 
-		static int getAPM();
+		static int GetApm();
 
 	private:
-		static HHOOK m_keyboard_hook;
-		static HHOOK m_mouse_hook;
-		static void setHooks(void);
-		static void removeHooks(void);
-		static LRESULT CALLBACK keyboardProc(int nCode, WORD wParam, LONG lParam);
-		static LRESULT CALLBACK mouseProc(int nCode, WORD wParam, LONG lParam);
+		static HHOOK m_keyboardHook;
+		static HHOOK m_mouseHook;
+		static void SetHooks(void);
+		static void RemoveHooks(void);
+		static LRESULT CALLBACK KeyboardProc(int nCode, WORD wParam, LONG lParam);
+		static LRESULT CALLBACK MouseProc(int nCode, WORD wParam, LONG lParam);
 
-		void tick();
-		void incrementSecond();
-		static void addAction();
-		int calculateAPM();
-		static void setAPM(int apm);
+		void Tick();
+		void IncrementSecond();
+		static void AddAction();
+		int CalculateAPM();
+		static void SetApm(int apm);
 
 		std::thread t;
 
 		static std::mutex m_lock;
-		static std::vector<int> m_actions_per_second;
-		const int m_apm_window = 60;
-		static int m_current_apm;
-		int m_rolling_actions;
+		static std::vector<int> m_actionsPerSecond;
+		const int m_apmWindow = 60;
+		static int m_currentApm;
+		int m_rollingActions;
 		std::atomic<bool> m_running;
 	};
 } // namespace tracker
