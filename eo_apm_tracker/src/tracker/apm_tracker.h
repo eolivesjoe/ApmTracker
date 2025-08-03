@@ -31,7 +31,7 @@ namespace tracker
 		void IncrementSecond();
 		static void AddAction();
 		int CalculateAPM();
-		static void SetApm(int apm);
+		static void SetApm(int newApm);
 
 		std::thread t;
 

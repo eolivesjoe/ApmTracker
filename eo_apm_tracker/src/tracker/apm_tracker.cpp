@@ -48,10 +48,10 @@ namespace tracker
 
 	void ApmTracker::IncrementSecond()
 	{
-		int calculated_apm = CalculateAPM();
+		int calculatedApm = CalculateAPM();
 
 		const std::lock_guard<std::mutex> lock(m_lock);
-		SetApm(calculated_apm);
+		SetApm(calculatedApm);
 		m_actionsPerSecond.push_back(0);
 
 		if (m_actionsPerSecond.size() > MAX_HISTORY)
@@ -72,24 +72,24 @@ namespace tracker
 
 	int ApmTracker::CalculateAPM()
 	{
-		int current_second = m_actionsPerSecond.size() - 1;
+		int currentSecond = m_actionsPerSecond.size() - 1;
 
-		if (current_second < 1)
+		if (currentSecond < 1)
 			return 0;
 
-		m_rollingActions += m_actionsPerSecond[current_second];
+		m_rollingActions += m_actionsPerSecond[currentSecond];
 		if (m_actionsPerSecond.size() > m_apmWindow)
 		{
-			m_rollingActions -= m_actionsPerSecond[current_second - m_apmWindow];
+			m_rollingActions -= m_actionsPerSecond[currentSecond - m_apmWindow];
 			return m_rollingActions;
 		}
-		float apm = static_cast<float>(m_apmWindow) / static_cast<float>(current_second);
+		float apm = static_cast<float>(m_apmWindow) / static_cast<float>(currentSecond);
 		return static_cast<int>(apm * m_rollingActions);
 	}
 
-	void ApmTracker::SetApm(int new_apm)
+	void ApmTracker::SetApm(int newApm)
 	{
-		m_currentApm = new_apm;
+		m_currentApm = newApm;
 	}
 
 	int ApmTracker::GetApm()
