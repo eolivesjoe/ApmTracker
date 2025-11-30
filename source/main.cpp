@@ -1,5 +1,5 @@
-#include "app/app.h"
-#include "logger/logger.h"
+#include "app/App.h"
+#include "logger/Logger.h"
 
 int main(int argc, char* argv[])
 {
