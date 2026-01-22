@@ -21,13 +21,15 @@ namespace tracker
 
 	}
 
-	void ApmTracker::start()
+	void 
+	ApmTracker::start()
 	{
 		setHooks();
 		t = std::thread(&ApmTracker::tick, this);
 	}
 
-	void ApmTracker::stop()
+	void
+	ApmTracker::stop()
 	{
 		m_running = false;
 		removeHooks();
@@ -37,7 +39,8 @@ namespace tracker
 		}
 	}
 
-	void ApmTracker::tick()
+	void
+	ApmTracker::tick()
 	{
 		while (m_running)
 		{
@@ -46,7 +49,8 @@ namespace tracker
 		}
 	}
 
-	void ApmTracker::incrementSecond()
+	void
+	ApmTracker::incrementSecond()
 	{
 		int calculatedApm = calculateAPM();
 
@@ -61,7 +65,8 @@ namespace tracker
 		}
 	}
 
-	void ApmTracker::addAction()
+	void
+	ApmTracker::addAction()
 	{
 		const std::lock_guard<std::mutex> lock(m_lock);
 		if (!m_actionsPerSecond.empty())
@@ -70,7 +75,8 @@ namespace tracker
 		}
 	}
 
-	int ApmTracker::calculateAPM()
+	int
+	ApmTracker::calculateAPM()
 	{
 		int currentSecond = m_actionsPerSecond.size() - 1;
 
@@ -87,29 +93,34 @@ namespace tracker
 		return static_cast<int>(apm * m_rollingActions);
 	}
 
-	void ApmTracker::setApm(int newApm)
+	void
+	ApmTracker::setApm(int newApm)
 	{
 		m_currentApm = newApm;
 	}
 
-	int ApmTracker::getApm()
+	int
+	ApmTracker::getApm()
 	{
 		return m_currentApm;
 	}
 
-	void ApmTracker::setHooks(void)
+	void
+	ApmTracker::setHooks(void)
 	{
 		m_keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, (HOOKPROC)keyboardProc, 0, 0);
 		m_mouseHook = SetWindowsHookEx(WH_MOUSE_LL, (HOOKPROC)mouseProc, 0, 0);
 	}
 
-	void ApmTracker::removeHooks(void)
+	void
+	ApmTracker::removeHooks(void)
 	{
 		UnhookWindowsHookEx(m_keyboardHook);
 		UnhookWindowsHookEx(m_mouseHook);
 	}
 
-	LRESULT CALLBACK ApmTracker::keyboardProc(int nCode, WORD wParam, LONG lParam)
+	LRESULT CALLBACK
+	ApmTracker::keyboardProc(int nCode, WORD wParam, LONG lParam)
 	{
 		if (nCode >= 0 && (wParam == WM_KEYUP || wParam == WM_SYSKEYUP))
 			addAction();
@@ -117,7 +128,8 @@ namespace tracker
 		return CallNextHookEx(NULL, nCode, wParam, lParam);
 	}
 
-	LRESULT CALLBACK ApmTracker::mouseProc(int nCode, WORD wParam, LONG lParam)
+	LRESULT CALLBACK
+	ApmTracker::mouseProc(int nCode, WORD wParam, LONG lParam)
 	{
 		if (nCode >= 0 && (
 			wParam == WM_LBUTTONUP || wParam == WM_RBUTTONUP ||
@@ -129,7 +141,8 @@ namespace tracker
 		return CallNextHookEx(NULL, nCode, wParam, lParam);
 	}
 
-	void ApmTracker::resetSession()
+	void
+	ApmTracker::resetSession()
 	{
 		std::lock_guard<std::mutex> lock(m_lock);
 		m_actionsPerSecond.clear();

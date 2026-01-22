@@ -28,7 +28,8 @@ namespace window
 		}
 	}
 
-	void Window::initializeWindow()
+	void
+	Window::initializeWindow()
 	{
 		WNDCLASSEX wc = { sizeof(WNDCLASSEX) };
 		wc.style = CS_HREDRAW | CS_VREDRAW;
@@ -73,7 +74,8 @@ namespace window
 			SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 	}
 
-	int Window::run()
+	int
+	Window::run()
 	{
 		MSG msg = {};
 		while (GetMessage(&msg, nullptr, 0, 0) > 0)
@@ -84,7 +86,8 @@ namespace window
 		return static_cast<int>(msg.wParam);
 	}
 
-	LRESULT CALLBACK Window::wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+	LRESULT CALLBACK
+	Window::wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		Window* window = reinterpret_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
@@ -116,7 +119,8 @@ namespace window
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 		}
 	}
-	void Window::onPaint()
+	void
+	Window::onPaint()
 	{
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(m_hwnd, &ps);
