@@ -13,25 +13,25 @@ namespace tracker
 		ApmTracker();
 		~ApmTracker();
 
-		void Start();
-		void Stop();
-		void ResetSession();
+		void start();
+		void stop();
+		void resetSession();
 
-		static int GetApm();
+		static int getApm();
 
 	private:
 		static HHOOK m_keyboardHook;
 		static HHOOK m_mouseHook;
-		static void SetHooks(void);
-		static void RemoveHooks(void);
-		static LRESULT CALLBACK KeyboardProc(int nCode, WORD wParam, LONG lParam);
-		static LRESULT CALLBACK MouseProc(int nCode, WORD wParam, LONG lParam);
+		static void setHooks(void);
+		static void removeHooks(void);
+		static LRESULT CALLBACK keyboardProc(int nCode, WORD wParam, LONG lParam);
+		static LRESULT CALLBACK mouseProc(int nCode, WORD wParam, LONG lParam);
 
-		void Tick();
-		void IncrementSecond();
-		static void AddAction();
-		int CalculateAPM();
-		static void SetApm(int newApm);
+		void tick();
+		void incrementSecond();
+		static void addAction();
+		int calculateAPM();
+		static void setApm(int newApm);
 
 		std::thread t;
 

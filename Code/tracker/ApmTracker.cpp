@@ -21,37 +21,37 @@ namespace tracker
 
 	}
 
-	void ApmTracker::Start()
+	void ApmTracker::start()
 	{
-		SetHooks();
-		t = std::thread(&ApmTracker::Tick, this);
+		setHooks();
+		t = std::thread(&ApmTracker::tick, this);
 	}
 
-	void ApmTracker::Stop()
+	void ApmTracker::stop()
 	{
 		m_running = false;
-		RemoveHooks();
+		removeHooks();
 		if (t.joinable())
 		{
 			t.join();
 		}
 	}
 
-	void ApmTracker::Tick()
+	void ApmTracker::tick()
 	{
 		while (m_running)
 		{
-			IncrementSecond();
+			incrementSecond();
 			Sleep(1000);
 		}
 	}
 
-	void ApmTracker::IncrementSecond()
+	void ApmTracker::incrementSecond()
 	{
-		int calculatedApm = CalculateAPM();
+		int calculatedApm = calculateAPM();
 
 		const std::lock_guard<std::mutex> lock(m_lock);
-		SetApm(calculatedApm);
+		setApm(calculatedApm);
 		m_actionsPerSecond.push_back(0);
 
 		if (m_actionsPerSecond.size() > MAX_HISTORY)
@@ -61,7 +61,7 @@ namespace tracker
 		}
 	}
 
-	void ApmTracker::AddAction()
+	void ApmTracker::addAction()
 	{
 		const std::lock_guard<std::mutex> lock(m_lock);
 		if (!m_actionsPerSecond.empty())
@@ -70,7 +70,7 @@ namespace tracker
 		}
 	}
 
-	int ApmTracker::CalculateAPM()
+	int ApmTracker::calculateAPM()
 	{
 		int currentSecond = m_actionsPerSecond.size() - 1;
 
@@ -87,49 +87,49 @@ namespace tracker
 		return static_cast<int>(apm * m_rollingActions);
 	}
 
-	void ApmTracker::SetApm(int newApm)
+	void ApmTracker::setApm(int newApm)
 	{
 		m_currentApm = newApm;
 	}
 
-	int ApmTracker::GetApm()
+	int ApmTracker::getApm()
 	{
 		return m_currentApm;
 	}
 
-	void ApmTracker::SetHooks(void)
+	void ApmTracker::setHooks(void)
 	{
-		m_keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, (HOOKPROC)KeyboardProc, 0, 0);
-		m_mouseHook = SetWindowsHookEx(WH_MOUSE_LL, (HOOKPROC)MouseProc, 0, 0);
+		m_keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, (HOOKPROC)keyboardProc, 0, 0);
+		m_mouseHook = SetWindowsHookEx(WH_MOUSE_LL, (HOOKPROC)mouseProc, 0, 0);
 	}
 
-	void ApmTracker::RemoveHooks(void)
+	void ApmTracker::removeHooks(void)
 	{
 		UnhookWindowsHookEx(m_keyboardHook);
 		UnhookWindowsHookEx(m_mouseHook);
 	}
 
-	LRESULT CALLBACK ApmTracker::KeyboardProc(int nCode, WORD wParam, LONG lParam)
+	LRESULT CALLBACK ApmTracker::keyboardProc(int nCode, WORD wParam, LONG lParam)
 	{
 		if (nCode >= 0 && (wParam == WM_KEYUP || wParam == WM_SYSKEYUP))
-			AddAction();
+			addAction();
 
 		return CallNextHookEx(NULL, nCode, wParam, lParam);
 	}
 
-	LRESULT CALLBACK ApmTracker::MouseProc(int nCode, WORD wParam, LONG lParam)
+	LRESULT CALLBACK ApmTracker::mouseProc(int nCode, WORD wParam, LONG lParam)
 	{
 		if (nCode >= 0 && (
 			wParam == WM_LBUTTONUP || wParam == WM_RBUTTONUP ||
 			wParam == WM_MBUTTONUP || wParam == WM_XBUTTONUP))
 		{
-			AddAction();
+			addAction();
 		}
 
 		return CallNextHookEx(NULL, nCode, wParam, lParam);
 	}
 
-	void ApmTracker::ResetSession()
+	void ApmTracker::resetSession()
 	{
 		std::lock_guard<std::mutex> lock(m_lock);
 		m_actionsPerSecond.clear();

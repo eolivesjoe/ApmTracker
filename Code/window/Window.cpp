@@ -8,7 +8,7 @@ namespace window
 	Window::Window(HINSTANCE hInstance, int nCmdShow, tracker::ApmTracker* tracker)
 		: m_hInstance(hInstance), m_nCmdShow(nCmdShow), m_hwnd(nullptr), m_hFont(nullptr), m_tracker(tracker)
 	{
-		InitializeWindow();
+		initializeWindow();
 
 		m_hFont = CreateFontA(
 			48, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
@@ -28,11 +28,11 @@ namespace window
 		}
 	}
 
-	void Window::InitializeWindow()
+	void Window::initializeWindow()
 	{
 		WNDCLASSEX wc = { sizeof(WNDCLASSEX) };
 		wc.style = CS_HREDRAW | CS_VREDRAW;
-		wc.lpfnWndProc = Window::WndProc;
+		wc.lpfnWndProc = Window::wndProc;
 		wc.cbClsExtra = 0;
 		wc.cbWndExtra = 0;
 		wc.hInstance = m_hInstance;
@@ -73,7 +73,7 @@ namespace window
 			SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
 	}
 
-	int Window::Run()
+	int Window::run()
 	{
 		MSG msg = {};
 		while (GetMessage(&msg, nullptr, 0, 0) > 0)
@@ -84,7 +84,7 @@ namespace window
 		return static_cast<int>(msg.wParam);
 	}
 
-	LRESULT CALLBACK Window::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+	LRESULT CALLBACK Window::wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 		Window* window = reinterpret_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 
@@ -94,7 +94,7 @@ namespace window
 		{
 			if (window) 
 			{
-				window->OnPaint();
+				window->onPaint();
 			}
 			return 0;
 		}
@@ -116,7 +116,7 @@ namespace window
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 		}
 	}
-	void Window::OnPaint()
+	void Window::onPaint()
 	{
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(m_hwnd, &ps);
@@ -125,7 +125,7 @@ namespace window
 
 		int apm = 0;
 		if (m_tracker)
-			apm = m_tracker->GetApm();
+			apm = m_tracker->getApm();
 
 		std::string text = std::to_string(apm);
 		SetTextColor(hdc, RGB(0, 0, 0));

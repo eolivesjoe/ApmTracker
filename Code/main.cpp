@@ -3,11 +3,11 @@
 
 int main(int argc, char* argv[])
 {
-    logger::Init();
+    logger::init();
 
     app::App app;
-    logger::Info("starting tracker...");
-    app.Run();
+    logger::info("starting tracker...");
+    app.run();
 
     return 0;
 }

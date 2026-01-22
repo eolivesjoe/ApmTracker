@@ -5,6 +5,6 @@ namespace app
     class App 
     {
     public:
-        int Run();
+        int run();
     };
 } // namespace app
